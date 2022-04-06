@@ -60,7 +60,10 @@ class LogFile:
     
     def int_convert(self):
 
-        
+        if self.cycle_attr != None:
+            cycle_targets = self.data[self.cycle_attr].unique()
+            cycle_map = {name: n+1 for n, name in enumerate(cycle_targets)}
+            self.data[self.cycle_attr] = self.data[self.cycle_attr].replace(cycle_map)
         targets = self.data[self.activity].unique()
         map_to_int = {name: n+1 for n, name in enumerate(targets)}
         int_to_map = {n+1: name for n, name in enumerate(targets)}
