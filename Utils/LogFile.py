@@ -13,12 +13,13 @@ import math
 
 class LogFile:
 
-    def __init__(self, filename, delim, header, rows, time_attr, trace_attr, activity_attr = None, time_format = None, values = None, integer_input = False, convert = True, k = 1, dtype=None):
+    def __init__(self, filename, delim, header, rows, time_attr, trace_attr, activity_attr = None, time_format = None, cycle_attr= None, values = None, integer_input = False, convert = True, k = 1, dtype=None):
         self.filename = filename
         self.time = time_attr
         self.trace = trace_attr
         self.activity = activity_attr
         self.time_format = time_format
+        self.cycle_attr = cycle_attr
         if values is not None:
             self.values = values
         else:
@@ -74,7 +75,7 @@ class LogFile:
         amount_cases_subset = round(len(cases) * (percentage / 100))
         subset_data = self.data[self.data[self.trace].isin(cases[:amount_cases_subset])]
         
-        sub_logfile = LogFile(None, None, None, None, self.time, self.trace, self.activity, self.time_format, self.values, False, False)
+        sub_logfile = LogFile(None, None, None, None, self.time, self.trace, self.activity, self.time_format, self.cycle_attr, self.values, False, False)
         sub_logfile.filename = self.filename
         sub_logfile.values = self.values
         sub_logfile.time_format = self.time_format
@@ -377,7 +378,7 @@ class LogFile:
         split_data = self.data[(self.data[self.activity] == self.data[self.activity].iloc[0]) | (self.data[self.activity] == 'End')]
         split_data[self.time] = pd.to_datetime(split_data[self.time])
 
-        split_logfile = LogFile(None, None, None, None, self.time, self.trace, self.activity, self.time_format, self.values, False, False)
+        split_logfile = LogFile(None, None, None, None, self.time, self.trace, self.activity,  self.time_format, self.cycle_attr, self.values, False, False)
         split_logfile.filename = self.filename
         split_logfile.values = self.values
         split_logfile.time_format = self.time_format
@@ -428,7 +429,7 @@ class LogFile:
         test_data = self.data[self.data[self.trace].isin(best_test[self.trace].unique())]
     
 
-        train_logfile = LogFile(None, None, None, None, self.time, self.trace, self.activity, self.time_format, self.values, False, False)
+        train_logfile = LogFile(None, None, None, None, self.time, self.trace, self.activity, self.time_format, self.cycle_attr, self.values, False, False)
         train_logfile.filename = self.filename
         train_logfile.values = self.values
         train_logfile.time_format = self.time_format
@@ -438,7 +439,7 @@ class LogFile:
         train_logfile.data = train_data
         train_logfile.k = self.k
 
-        test_logfile = LogFile(None, None, None, None, self.time, self.trace, self.activity, self.time_format, self.values,  False, False)
+        test_logfile = LogFile(None, None, None, None, self.time, self.trace, self.activity, self.time_format, self.cycle_attr, self.values,  False, False)
         test_logfile.filename = self.filename
         test_logfile.values = self.values
         test_logfile.time_format = self.time_format
